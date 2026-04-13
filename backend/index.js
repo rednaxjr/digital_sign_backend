@@ -22,9 +22,7 @@ app.use('/', express.static(path.join(__dirname, './public/frontend/browser')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './public/frontend/browser/index.html'));
-});
-
-
+}); 
 //local prod
 // app.get('/*', (req, res) => {
 //   res.sendFile('./src/views/index.html', { root: __dirname });
