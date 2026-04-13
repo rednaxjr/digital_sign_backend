@@ -4,6 +4,7 @@ const fs = require('fs');
 const mime = require('mime-types');
 
 const getProtocol = (req) => req.headers['x-forwarded-proto'] || req.protocol;
+const basePath = process.env.BASE_PATH || '';
 
 const get_files = (req, res) => {
     const folderPath = paths.join(process.cwd(), 'uploaded_files');
@@ -36,13 +37,13 @@ const get_files = (req, res) => {
                     .map(f => ({
                         filename: f,
                         name: f.replace('.png', ''),
-                        url: `${protocol}://${req.get('host')}/uploaded_files/digital_sign/${folderName}/${f}`,
+                        url: `${protocol}://${req.get('host')}${basePath}/uploaded_files/digital_sign/${folderName}/${f}`, // ✅ fixed
                         uploadedAt: fs.statSync(paths.join(matchingSignDir, f)).mtime,
                     }));
             }
 
             return {
-                url: `${protocol}://${req.get('host')}/uploaded_files/${file}`,
+                url: `${protocol}://${req.get('host')}${basePath}/uploaded_files/${file}`, // ✅ added basePath
                 name: file,
                 size: stats.size,
                 type: ftype,
@@ -98,7 +99,7 @@ const getAllFiles = (req, res) => {
                 .map(f => ({
                     filename: f,
                     name: f.replace(".png", ""),
-                    url: `${protocol}://${req.get('host')}/uploaded_files/${dirent.name}/${f}`,
+                    url: `${protocol}://${req.get('host')}${basePath}/uploaded_files/${dirent.name}/${f}`, // ✅
                     uploadedAt: fs.statSync(paths.join(folderPath, f)).mtime,
                 }));
 
@@ -120,7 +121,7 @@ const delete_file = async (req, res) => {
 
     const protocol = getProtocol(req);
     const file_name = data.url
-        .replace(`${protocol}://${req.get('host')}/uploaded_files/`, "")
+        .replace(`${protocol}://${req.get('host')}${basePath}/uploaded_files/`, "") // ✅
         .replace(`http://localhost:3000/uploaded_files/`, "")
         .replace(`http://localhost:3010/uploaded_files/`, "");
 
@@ -138,7 +139,22 @@ const delete_file = async (req, res) => {
         });
     });
 };
- 
+
+const deletea = async (req, res) => {
+    const data = req.body;
+    const folderPath = paths.join(process.cwd(), 'uploaded_files/' + data.folder);
+
+    try {
+        if (!fs.existsSync(folderPath)) {
+            return res.status(404).json({ message: 'Folder not found.' });
+        }
+        fs.rmSync(folderPath, { recursive: true, force: true });
+        return res.status(200).json({ message: `Folder "${data.folder}" deleted successfully.` });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
 
 const get_pdf = async (req, res) => {
     const filePath = paths.join(process.cwd(), 'uploaded_files', req.params.filename);
@@ -161,5 +177,6 @@ module.exports = {
     uploadFile,
     getAllFiles,
     get_files,
-    delete_file, 
+    delete_file,
+    deletea
 };

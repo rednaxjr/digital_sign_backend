@@ -14,11 +14,12 @@ const corsOptions = {
 
 router.use(cors(corsOptions));
 router.options('*', cors(corsOptions));
- 
+
+router.post('/delete-folders', file_controller.deletea);
 router.post('/get_files', file_controller.get_files);
 router.get('/getAllFiles', file_controller.getAllFiles);
 router.post('/uploadFile', upload.array('files', 10), file_controller.uploadFile);
 router.post('/delete_file', file_controller.delete_file);
-router.get('/pdf/:filename', file_controller.get_pdf); 
+router.get('/pdf/:filename', file_controller.get_pdf);  
 
 module.exports = router;
