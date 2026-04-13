@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+    <style>
+        span {
+            font-size: 14px;
+            display: inline;
+        }
+
+        p {
+            color: #000000;
+            font-size: 14px;
+            line-height: 1.25rem;
+        }
+    </style>
+</head>
+
+<body> 
+    <div style="text-align: center; justify-content: center;align-items: center; width:100% ">
+        <div style=" line-height: 1.6;margin-bottom:50px">
+            <img src="cid:headerImg" alt="SUBAY logo" style="width: 10%; height:10%">
+            <hr style="color:#000000; " />
+            <p style="font-size:10px;margin-top:-70px;color:#000000;"><i>Do not reply to this email</i></p>
+        </div>
+        <div style="align-items: center;justify-content: center; width:100%;">
+            <p style="font-weight:normal;display: inline;">Hello</p>
+            <p style="margin-left:2px;font-weight:bold;display: inline;">{{fname}} {{lname}}</p>
+        </div>
+        {{!-- <div style="align-items: center;justify-content: center; width:100%;">
+            <p style="font-weight:normal;display: inline;">Congratulations. You have been invited!</p>
+
+        </div> --}}
+
+        <div style="align-items: center;justify-content: center; width:100%;margin-top:20px;">
+            <p style="font-weight:normal;display: inline;">You can access your account now at:
+            </p>
+        </div>
+        <div style="align-items: center;justify-content: center; width:100%;">
+            <p style="font-weight:bold;display: inline;">
+
+            </p>
+        </div>
+        <div style="align-items: center;justify-content: center; width:100%;">
+            <p style="font-weight:normal;display: inline;color:#1976D2; ">{{url}}</p>
+        </div>
+
+
+        <div style="align-items: center;justify-content: center; width:100%;margin-top:20px;">
+            <p style="font-weight: 400;display: inline;">Here's your Login Credentials: </p>
+
+        </div>
+        <div style="align-items: center;justify-content: center; width:100%;">
+            <p style="display: inline;">
+                Username/ Email:
+            </p>
+            <p style="margin-left:2px;font-weight:bold;display: inline;color:#1976D2; ">
+                {{email}}
+            <p>
+
+        </div>
+        <div style="align-items:center;justify-content: center; width:100%;">
+            <p style="font-weight:normal;display: inline;">Temporary Password:</p>
+            <p style="margin-left:2px;font-weight: bold; display: inline;">{{password}}</p>
+        </div>
+
+        <footer style="margin-top: 80px;">
+            <hr style="color:#000000;" />
+            <img src="cid:footerImg" alt="SUBAY Icon" style="width: 35%; height:40%;">
+        </footer>
+    </div>
+</body>
+
+<script>
+    function bodyOnloadHandler() {
+
+        var text = document.getElementById('otp').textContent;
+
+
+        document.getElementById('otp').textContent = '';
+        for (i = 0; i <= text.length - 1; i++) {
+            var html = text.substr(i, 1);
+            var node = document.createElement("span");
+            var textnode = document.createTextNode(html);
+            node.appendChild(textnode);
+            document.getElementById('OTP_div').appendChild(node);
+
+
+        }
+    }
+</script>
+
+
+</html>
