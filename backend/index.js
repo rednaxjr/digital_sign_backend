@@ -18,10 +18,10 @@ app.use('/uploaded_files', express.static(path.join(process.cwd(), 'uploaded_fil
 app.use("/api", routes); 
 
 
-app.use('/', express.static(path.join(__dirname, './public/browser')));
+app.use('/', express.static(path.join(__dirname, './public/frontend/browser')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/browser/index.html'));
+  res.sendFile(path.join(__dirname, './public/frontend/browser/index.html'));
 });
 
 
