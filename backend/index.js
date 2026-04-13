@@ -7,7 +7,7 @@ var path = require('path');
 const app = express();
 
 const corsOptions = {
-  origin: ['http://localhost:4200', 'http://localhost:4300'],
+  origin: ['http://localhost:4200', 'http://localhost:4300', 'https://stech.wheba-services.net'],
   credentials: true
 };
 
