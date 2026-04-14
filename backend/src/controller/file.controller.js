@@ -121,21 +121,22 @@ const delete_file = async (req, res) => {
 
     const protocol = getProtocol(req);
     const file_name = data.url
-        .replace(`${protocol}://${req.get('host')}${basePath}/uploaded_files/`, "") // ✅
-        .replace(`http://localhost:3000/uploaded_files/`, "")
-        .replace(`http://localhost:3010/uploaded_files/`, "");
+        .replace(`${protocol}://${req.get('host')}${basePath}/uploaded_files/`, "")
+    const folder_name = file_name.replace('.pdf', '');
+    const filePath = paths.join(process.cwd(), 'uploaded_files', folder_name);
 
-    const filePath = paths.join(process.cwd(), 'uploaded_files', file_name);
 
-    fs.exists(filePath, (exists) => {
-        if (!exists) {
-            return res.status(404).json({ error: 'File not found' });
+
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Unable to delete file' });
         }
-        fs.unlink(filePath, (err) => {
+        const folderPath = paths.dirname(filePath);
+        fs.rm(folderPath, { recursive: true, force: true }, (err) => {
             if (err) {
-                return res.status(500).json({ error: 'Unable to delete file' });
+                return res.status(500).json({ error: 'Unable to delete folder' });
             }
-            res.json({ message: 'File deleted successfully' });
+            res.json({ message: 'File and folder deleted successfully' });
         });
     });
 };
