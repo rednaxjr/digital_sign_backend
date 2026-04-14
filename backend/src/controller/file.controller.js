@@ -121,19 +121,31 @@ const delete_file = async (req, res) => {
 
     const protocol = getProtocol(req);
     const file_name = data.signatures[0].url
-        .replace(`${protocol}://${req.get('host')}${basePath}/uploaded_files/digital_sign/`, ""); 
+        .replace(`${protocol}://${req.get('host')}${basePath}/uploaded_files/digital_sign/`, "");
 
-    const filePath = paths.join(process.cwd(), 'uploaded_files', 'digital_sign', file_name); 
+    const filePath = paths.join(process.cwd(), 'uploaded_files', 'digital_sign', file_name);
 
-    fs.exists(filePath, (exists) => {
-        if (!exists) {
-            return res.status(404).json({ error: 'Signature not found' });
+    // fs.exists(filePath, (exists) => {
+    //     if (!exists) {
+    //         return res.status(404).json({ error: 'Signature not found' });
+    //     }
+
+    //     fs.unlink(filePath, (err) => {
+    //         if (err) {
+    //             return res.status(500).json({ error: 'Unable to delete signature' });
+    //         }
+    //         res.json({ message: 'Signature deleted successfully' });
+    //     });
+    // });
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Unable to delete signature' });
         }
 
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                return res.status(500).json({ error: 'Unable to delete signature' });
-            }
+        // Delete parent folder (IMG_0019/) if empty
+        const folderPath = paths.dirname(filePath);
+        fs.rmdir(folderPath, (err) => {
+            // Silently ignored if folder still has other PNGs
             res.json({ message: 'Signature deleted successfully' });
         });
     });
