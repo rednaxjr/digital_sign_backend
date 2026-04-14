@@ -121,9 +121,9 @@ const delete_file = async (req, res) => {
 
     const protocol = getProtocol(req);
     const file_name = url
-        .replace(`${protocol}://${req.get('host')}${basePath}/uploaded_files/`, "");
+        .replace(`${protocol}://${req.get('host')}${basePath}/uploaded_files/digital_sign/`, ""); 
 
-    const filePath = paths.join(process.cwd(), 'uploaded_files', file_name);
+    const filePath = paths.join(process.cwd(), 'uploaded_files', 'digital_sign', file_name); 
 
     fs.exists(filePath, (exists) => {
         if (!exists) {
