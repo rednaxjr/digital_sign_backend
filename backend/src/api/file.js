@@ -7,10 +7,7 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-const corsOptions = {
-  origin: ['http://localhost:4200', 'http://localhost:4300'],
-  credentials: true
-};
+ 
 
 router.use(cors(corsOptions));
 router.options('*', cors(corsOptions));

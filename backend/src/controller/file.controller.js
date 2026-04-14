@@ -114,6 +114,7 @@ const getAllFiles = (req, res) => {
 };
 
 const delete_file = async (req, res) => {
+    console.log(req.body)
     const data = req.body;
     if (!data) {
         return res.status(400).json({ error: 'File name is required' });
@@ -123,8 +124,9 @@ const delete_file = async (req, res) => {
     const file_name = data.url
         .replace(`${protocol}://${req.get('host')}${basePath}/uploaded_files/`, "")
     const folder_name = file_name.replace('.pdf', '');
+    console.log("folder name:" + folder_name)
     const filePath = paths.join(process.cwd(), 'uploaded_files', folder_name);
-
+    console.log("file path:" + filePath)
 
 
     fs.unlink(filePath, (err) => {
@@ -132,6 +134,8 @@ const delete_file = async (req, res) => {
             return res.status(500).json({ error: 'Unable to delete file' });
         }
         const folderPath = paths.dirname(filePath);
+
+        console.log("to_remove:" + filePath)
         fs.rm(folderPath, { recursive: true, force: true }, (err) => {
             if (err) {
                 return res.status(500).json({ error: 'Unable to delete folder' });
