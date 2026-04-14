@@ -120,7 +120,8 @@ const delete_file = async (req, res) => {
     if (!data) {
         return res.status(400).json({ error: 'File name is required' });
     } 
-    const file_name = data.signatures.url ;
+    const file_name = data.signatures[0].url ;
+    console.log(file_name)
     fs.exists(file_name, (exists) => {
         if (!exists) {
             return res.status(404).json({ error: 'File not found' });
