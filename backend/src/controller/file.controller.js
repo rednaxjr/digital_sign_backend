@@ -114,30 +114,27 @@ const getAllFiles = (req, res) => {
 };
 
 const delete_file = async (req, res) => {
-
-    console.log(req.body)
-    const data = req.body;
-    if (!data) {
-        return res.status(400).json({ error: 'File name is required' });
+    const { url } = req.body;
+    if (!url) {
+        return res.status(400).json({ error: 'Signature URL is required' });
     }
 
     const protocol = getProtocol(req);
-    const file_name = data.url
-        .replace(`${protocol}://${req.get('host')}${basePath}/uploaded_files/`, "")
-    const folder_name = file_name.replace('.pdf', '');
-    console.log("folder name:" + folder_name)
-    const filePath = paths.join(process.cwd(), 'uploaded_files/digital_sign/', folder_name + "/" + file_name);
-    console.log("file path:" + filePath)
+    const file_name = url
+        .replace(`${protocol}://${req.get('host')}${basePath}/uploaded_files/`, "");
+
+    const filePath = paths.join(process.cwd(), 'uploaded_files', file_name);
 
     fs.exists(filePath, (exists) => {
         if (!exists) {
-            return res.status(404).json({ error: 'File not found' });
+            return res.status(404).json({ error: 'Signature not found' });
         }
+
         fs.unlink(filePath, (err) => {
             if (err) {
-                return res.status(500).json({ error: 'Unable to delete file' });
+                return res.status(500).json({ error: 'Unable to delete signature' });
             }
-            res.json({ message: 'File deleted successfully' });
+            res.json({ message: 'Signature deleted successfully' });
         });
     });
     // const data = req.body;
